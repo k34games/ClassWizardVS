@@ -86,7 +86,6 @@ namespace ClassWizard
         /// <param name="e">The event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-
             this.package.JoinableTaskFactory.RunAsync(async delegate
             {
                 ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(WizardWindow), 0, true, this.package.DisposalToken);
