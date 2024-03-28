@@ -7,14 +7,13 @@
              Background="{DynamicResource {x:Static vsshell:VsBrushes.WindowKey}}"
              Foreground="{DynamicResource {x:Static vsshell:VsBrushes.WindowTextKey}}"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
-             Name="MyToolWindow">
-    <Grid Margin="0,10,0,0">
-        <TextBlock x:Name="debugText" Margin="46,170,46,96" Text="Destination" FontSize="18"/>
+             d:DesignHeight="500" d:DesignWidth="500"
+             Name="MyToolWindow" Width="500" Height="497">
+    <Grid Margin="0,0,0,0" Width="500" Height="500" HorizontalAlignment="Center">
+        <TextBlock x:Name="debugText" Margin="0,153,0,297" Text="Destination" FontSize="18" Width="500" Height="50" HorizontalAlignment="Center"/>
+        <Button x:Name="ChooseDestinationButton" Content="Choose Destination" Margin="0,300,30,0" Click="select_Destination_Click" Width="200" Height="150" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <TextBox x:Name="ClassNameEntryTextBox" TextWrapping="Wrap" Text="Class Name" Margin="36,272,0,0" Width="200" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button x:Name="GenerateButton" Content="Generate" Margin="36,350,264,50" Width="200" Height="100" Click="generate_class_click"/>
 
-
-        <Button x:Name="ChooseDestinationButton" Content="Choose Destination" Margin="74,134,74,134" Click="select_Destination_Click"/>
-        <TextBox x:Name="ClassNameEntryTextBox" TextWrapping="Wrap" Text="Class Name" Margin="36,208,36,64"/>
-        <Button x:Name="GenerateButton" Content="Generate" Margin="96,238,96,10"/>
     </Grid>
 </UserControl>

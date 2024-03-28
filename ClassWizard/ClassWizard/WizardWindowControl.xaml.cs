@@ -23,13 +23,7 @@ namespace ClassWizard
             //ChooseDestinationButton.MouseLeftButtonUp += SelectDestination;
         }
         
-        private void SelectDestination(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-            //System.Windows.Forms.FolderBrowserDialog _dia = new System.Windows.Forms.FolderBrowserDialog();
-            //debugText.Text = _dia.SelectedPath;
-
-        }
+   
 
         /// <summary>
         /// Handles click on the button by displaying a message box.
@@ -56,9 +50,21 @@ namespace ClassWizard
             */
             //TODO find current folder
             System.Windows.Forms.FolderBrowserDialog _dia = new System.Windows.Forms.FolderBrowserDialog();
-            _dia.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            //_dia.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+            
+            _dia.RootFolder = System.Environment.SpecialFolder.Desktop;
+            _dia.SelectedPath= System.IO.Directory.GetCurrentDirectory();
             _dia.ShowDialog();
+            
             debugText.Text = _dia.SelectedPath;
+        }
+        [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
+        private void generate_class_click(object sender, RoutedEventArgs e)
+        {
+            string className = System.IO.Path.Combine(debugText.Text , ClassNameEntryTextBox.Text);
+            System.IO.File.Create( className + ".h").Close();
+            System.IO.File.Create( className + ".cpp").Close();
         }
     }
 }
