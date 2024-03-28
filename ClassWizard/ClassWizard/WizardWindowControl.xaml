@@ -9,10 +9,12 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Name="MyToolWindow">
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <TextBlock Margin="10" HorizontalAlignment="Center">WizardWindow</TextBlock>
-            <Button Content="Click me!" Click="button1_Click" Width="120" Height="80" Name="button1"/>
-        </StackPanel>
+    <Grid Margin="0,10,0,0">
+        <TextBlock x:Name="debugText" Margin="46,170,46,96" Text="Destination" FontSize="18"/>
+
+
+        <Button x:Name="ChooseDestinationButton" Content="Choose Destination" Margin="74,134,74,134" Click="select_Destination_Click"/>
+        <TextBox x:Name="ClassNameEntryTextBox" TextWrapping="Wrap" Text="Class Name" Margin="36,208,36,64"/>
+        <Button x:Name="GenerateButton" Content="Generate" Margin="96,238,96,10"/>
     </Grid>
 </UserControl>

@@ -1,6 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.Win32;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
+
 
 namespace ClassWizard
 {
@@ -14,7 +18,17 @@ namespace ClassWizard
         /// </summary>
         public WizardWindowControl()
         {
+            
             this.InitializeComponent();
+            //ChooseDestinationButton.MouseLeftButtonUp += SelectDestination;
+        }
+        
+        private void SelectDestination(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+            //System.Windows.Forms.FolderBrowserDialog _dia = new System.Windows.Forms.FolderBrowserDialog();
+            //debugText.Text = _dia.SelectedPath;
+
         }
 
         /// <summary>
@@ -29,6 +43,22 @@ namespace ClassWizard
             MessageBox.Show(
                 string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
                 "WizardWindow");
+        }
+        [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
+        private void select_Destination_Click(object sender, RoutedEventArgs e)
+        {
+            /*
+            MessageBox.Show(
+                    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
+                    "WizardWindow"
+            );
+            */
+            //TODO find current folder
+            System.Windows.Forms.FolderBrowserDialog _dia = new System.Windows.Forms.FolderBrowserDialog();
+            _dia.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            _dia.ShowDialog();
+            debugText.Text = _dia.SelectedPath;
         }
     }
 }
