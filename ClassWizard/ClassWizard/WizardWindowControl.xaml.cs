@@ -4,6 +4,8 @@ using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO;
+using System.Text;
 
 
 namespace ClassWizard
@@ -63,7 +65,11 @@ namespace ClassWizard
         private void generate_class_click(object sender, RoutedEventArgs e)
         {
             string className = System.IO.Path.Combine(debugText.Text , ClassNameEntryTextBox.Text);
-            System.IO.File.Create( className + ".h").Close();
+            FileStream _stream =  System.IO.File.Create( className + ".h");
+            byte[] buffer = new UTF8Encoding(true).GetBytes("coucou");
+
+            _stream.Write(buffer, 0, buffer.Length);
+            _stream.Close();
             System.IO.File.Create( className + ".cpp").Close();
         }
     }
