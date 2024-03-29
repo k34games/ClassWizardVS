@@ -64,13 +64,24 @@ namespace ClassWizard
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void generate_class_click(object sender, RoutedEventArgs e)
         {
-            string className = System.IO.Path.Combine(debugText.Text , ClassNameEntryTextBox.Text);
-            FileStream _stream =  System.IO.File.Create( className + ".h");
-            byte[] buffer = new UTF8Encoding(true).GetBytes("coucou");
+            string filePath = System.IO.Path.Combine(debugText.Text, ClassNameEntryTextBox.Text);
+            string className =ClassNameEntryTextBox.Text;
 
-            _stream.Write(buffer, 0, buffer.Length);
-            _stream.Close();
-            System.IO.File.Create( className + ".cpp").Close();
+            GenerateClasses(filePath , className);
+        }
+
+        private void GenerateClasses(string filePath, string className)
+        {
+
+            FileStream _streamDotH = System.IO.File.Create(filePath + ".h");
+            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"class {className}" + "\n{\n};");
+            _streamDotH.Write(bufferDotH, 0, bufferDotH.Length);
+            _streamDotH.Close();
+            FileStream _streamDotCpp = System.IO.File.Create(filePath + ".cpp");
+            byte[] bufferDotCpp = new UTF8Encoding(true).GetBytes($"#include \"{ className}.h\"");
+            _streamDotCpp.Write(bufferDotCpp, 0, bufferDotCpp.Length);
+            _streamDotCpp.Close();
+            
         }
     }
 }
