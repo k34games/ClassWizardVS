@@ -32,11 +32,8 @@ namespace ClassWizard
             // the object returned by the Content property.
             this.Content = new WizardWindowControl();
 
-            Bind();
+             
         }
-        void Bind()
-        {
-            
-        }
+ 
     };
 }

@@ -59,14 +59,7 @@
 				<ButtonText>Wizard Window</ButtonText>
 			</Strings>
 		</Button>
- 
-      <Button guid="guidClassWizardPackageCmdSet" id="cmdidBaseCommand" priority="0x0100" type="Button">
-        <Parent guid="guidClassWizardPackageCmdSet" id="MyMenuGroup" />
-        <Icon guid="guidImages2" id="bmpPic1" />
-        <Strings>
-          <ButtonText>Invoke BaseCommand</ButtonText>
-        </Strings>
-      </Button>
+
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
