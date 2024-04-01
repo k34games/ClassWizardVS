@@ -23,6 +23,7 @@ namespace ClassWizard
             
             this.InitializeComponent();
             //ChooseDestinationButton.MouseLeftButtonUp += SelectDestination;
+            GenerateButton.IsEnabled = false;
         }
         
    
@@ -72,11 +73,12 @@ namespace ClassWizard
 
         private void GenerateClasses(string filePath, string className)
         {
-
+            //.h
             FileStream _streamDotH = System.IO.File.Create(filePath + ".h");
-            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"class {className}" + "\n{\n};");
+            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"#pragma once \nclass {className}" + "\n{\n};");
             _streamDotH.Write(bufferDotH, 0, bufferDotH.Length);
             _streamDotH.Close();
+            //.cpp
             FileStream _streamDotCpp = System.IO.File.Create(filePath + ".cpp");
             byte[] bufferDotCpp = new UTF8Encoding(true).GetBytes($"#include \"{ className}.h\"");
             _streamDotCpp.Write(bufferDotCpp, 0, bufferDotCpp.Length);

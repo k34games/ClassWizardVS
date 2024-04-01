@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using EnvDTE;
+using EnvDTE100;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Runtime.InteropServices;
@@ -32,7 +34,11 @@ namespace ClassWizard
             // the object returned by the Content property.
             this.Content = new WizardWindowControl();
 
-             
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            DTE test = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
+            //gets the solution
+            Solution _solution = test.Solution;
+ 
         }
  
     };
