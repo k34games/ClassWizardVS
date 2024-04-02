@@ -1,5 +1,6 @@
 ﻿using EnvDTE;
 using EnvDTE100;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
@@ -48,8 +49,8 @@ namespace ClassWizard
             }
             //TODO give selection
             //get project 0
-            Project _project = _solution.Projects.Item(0);
-            if (_project == null)
+            Project _project = _solution.Projects.Item(new object());
+            if (_project == null ||_solution.Projects == null)
             {
                 return;
             }
@@ -62,7 +63,71 @@ namespace ClassWizard
             }
             MessageBox.Show(_out);
  */
+            TestMethod();
         }
+        void TestMethod()
+        {
+            DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
+            try
+            {   // Open a project before running this sample  
+                Projects prjs = dte.Solution.Projects;
+                string msg = "There are " + prjs.Count.ToString() + " projects in this collection.";
+                msg += "\nThe application containing this Projects collection: " + prjs.DTE.Name;
+                msg += "\nThe parent object of the Projects collection: " + prjs.Parent.Name;
+                msg += "\nThe GUID representing the Projects type: " + prjs.Kind;
+                msg += "\nThe projects name are:\n ";
+                /*
+                 * en gros de ce que je comprends
+                 * les filtres ET les fichiers sont des items
+                 * //TODO explorer la piste des documents
+                 * */
+                foreach (Project _proj in prjs)
+                {
+                    msg += _proj.Name + " ";
+                    foreach (ProjectItem _item  in _proj.ProjectItems)
+                    {
+                        //les filtres
+                        /*
+                        msg += "item " + _item.Name + " of type " + _item.GetType()+ "\n";
+                        foreach (ProjectItem _itemItem in _item.ProjectItems)
+                        {
+                            msg += "item item" + _itemItem.Name + " of type " + _itemItem.GetType()+ "\n";
+                            
+                        }
+                         */
+
+                        msg += "\nitem " + _item.Name;
+                        Document _doc = _item.Document;
+                        if (_doc == null)
+                            continue;
+                        msg += "document of language " + _doc.Language + "\n";
+                        foreach (ProjectItem _itemItem in _item.ProjectItems)
+                        {
+
+                            msg += "\nitem " + _itemItem.Name;
+                            _doc = _itemItem.Document;
+                            if (_doc == null) 
+                                continue;
+                            msg += "document of language " + _doc.Language+ "\n";
+                        }
+                        
  
+                    }
+                }
+                if (prjs.Properties != null)
+                {
+                    msg += "\nProperties:";
+                    foreach (Property prop in prjs.Properties)
+                    {
+                        msg += "\n   " + prop.Name;
+                    }
+                }
+                MessageBox.Show(msg, "Projects Collection");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     };
 }

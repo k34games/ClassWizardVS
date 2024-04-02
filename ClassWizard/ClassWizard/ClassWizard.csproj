@@ -83,6 +83,10 @@
   <ItemGroup>
     <Content Include="Resources\BaseCommand.png" />
     <Content Include="Resources\WizardWindowCommand.png" />
+    <Content Include="WizardLogo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Page Include="WizardWindowControl.xaml">

@@ -69,6 +69,7 @@ namespace ClassWizard
             string className =ClassNameEntryTextBox.Text;
 
             GenerateClasses(filePath , className);
+ 
         }
 
         private void GenerateClasses(string filePath, string className)
