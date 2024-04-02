@@ -24,9 +24,10 @@ namespace ClassWizard
             this.InitializeComponent();
             //ChooseDestinationButton.MouseLeftButtonUp += SelectDestination;
             GenerateButton.IsEnabled = false;
+
         }
         
-   
+    
 
         /// <summary>
         /// Handles click on the button by displaying a message box.

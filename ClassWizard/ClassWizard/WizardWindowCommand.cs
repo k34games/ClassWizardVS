@@ -88,6 +88,7 @@ namespace ClassWizard
         {
             this.package.JoinableTaskFactory.RunAsync(async delegate
             {
+
                 ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(WizardWindow), 0, true, this.package.DisposalToken);
                 if ((null == window) || (null == window.Frame))
                 {
