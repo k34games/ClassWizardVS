@@ -58,7 +58,7 @@ namespace ClassWizard
             _dia.RootFolder = System.Environment.SpecialFolder.Desktop;
             _dia.SelectedPath= System.IO.Directory.GetCurrentDirectory();
             _dia.ShowDialog();
-            
+            GenerateButton.IsEnabled = true;
             debugText.Text = _dia.SelectedPath;
         }
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions", Justification = "Sample code")]
