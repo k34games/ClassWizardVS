@@ -1,32 +1,64 @@
 ﻿using EnvDTE;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace ClassWizard
 {
     static class Logic
     {
-        private static List<string> RecurseExploreItem(ProjectItem _item,string _path, Func<ProjectItem, bool> _filter)
+        public class ProjectItemInfo 
         {
-            List<string> _result = new List<string>();
+            public ProjectItem item  ;
+            public string solutionPath;
+            public bool isDocument;
+            public string documentPath;
+            public ProjectItemInfo(ProjectItem _item, string _solutionPath, bool _isDocument, string _documentPath)
+            {
+                item = _item;
+                solutionPath = _solutionPath;
+
+                isDocument = _isDocument;
+                documentPath = _documentPath;
+            }
+           
+        }
+        private static List<ProjectItemInfo> RecurseExploreItem(ProjectItem _item,string _path, Func<ProjectItem, bool> _filter)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+            List<ProjectItemInfo> _result = new List<ProjectItemInfo>();
             foreach (ProjectItem childItem in _item.ProjectItems)
             { 
                 if (_filter(childItem))
                 {
-                    _result.Add($"{_path}/{childItem.Name}");
+                    ProjectItemInfo _info;
+                    Document _doc = childItem.Document;
+                    if (_doc==null)
+                    {
+                     _info = new ProjectItemInfo( childItem, _path, false, "");
+
+                    }
+                    else
+                    {
+                        _info = new ProjectItemInfo(childItem, _path,true, System.IO.Path.Combine(_doc.Path, _doc.Name));
+                    }
+                    _result.Add(_info);
                 }
                 _result.AddRange(RecurseExploreItem(childItem, $"/{_path}/{childItem.Name}", _filter));
             }
             return _result ;
         }
-        public static List<string> RecurseExploreProject(Project _project, Func<ProjectItem, bool> _filter)
+        public static List<ProjectItemInfo> RecurseExploreProject(Project _project, Func<ProjectItem, bool> _filter)
         {
-            List<string> _result =new List<string>() ;
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
+            List<ProjectItemInfo> _result =new List<ProjectItemInfo>() ;
             foreach (ProjectItem _item in _project.ProjectItems)
             {
                 //les filtres
@@ -40,7 +72,20 @@ namespace ClassWizard
                  */
                 if (_filter(_item))
                 {
-                    _result.Add( _item.Name );
+ 
+                    Document _doc = _item.Document;
+                    ProjectItemInfo _info ;
+                    //= new ProjectItemInfo(_item, $"{_project.Name}/{_item.Name}", _item.Document != null)
+                    if (_doc == null)
+                    {
+                        _info = new ProjectItemInfo(_item, $"{_project.Name}/{_item.Name}", false, "");
+
+                    }
+                    else
+                    {
+                        _info = new ProjectItemInfo(_item, $"{_project.Name}/{_item.Name}", true, System.IO.Path.Combine(_doc.Path, _doc.Name));
+                    }
+                    _result.Add(_info);
                 }
                 _result.AddRange(RecurseExploreItem(_item, $"{_project.Name}/{_item.Name}",_filter));
                 /*
@@ -55,6 +100,28 @@ namespace ClassWizard
             return _result  ;
         }
 
+        public static List<ProjectItemInfo> GetItemsAllProjects(Func<ProjectItem, bool> _filter)
+        {
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
+          // Open a project before running this sample  
+                Projects prjs = dte.Solution.Projects;
+
+                List<ProjectItemInfo> resultList = new List<ProjectItemInfo>();
+                foreach (Project _proj in prjs)
+                {
+                     resultList.AddRange(Logic.RecurseExploreProject(_proj, _filter ));
+                    
+                }
+                return resultList ;
+
+            
+
+        }
+    
+    
+    /*}
         public static string TestMethod()
         {
             DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
@@ -70,8 +137,8 @@ namespace ClassWizard
                  * en gros de ce que je comprends
                  * les filtres ET les fichiers sont des items
                  * //TODO explorer la piste des documents
-                 * */
-                #region t
+                 * 
+      
                 //foreach (Project _proj in prjs)
                 //{
                 //    msg += _proj.Name + " ";
@@ -85,7 +152,7 @@ namespace ClassWizard
                 //            msg += "item item" + _itemItem.Name + " of type " + _itemItem.GetType()+ "\n";
 
                 //        }
-                //         */
+                //         
 
                 //        msg += "\nitem " + _item.Name;
                 //        Document _doc = _item.Document;
@@ -100,11 +167,9 @@ namespace ClassWizard
                 //            if (_doc == null) 
                 //                continue;
                 //            msg += "document of language " + _doc.Language+ "\n";
-                //        }
-
-
-                //    }
-                #endregion
+      
+ 
+     
                 foreach (Project _proj in prjs)
                 {
                     System.Collections.Generic.List<string> _testList = Logic.RecurseExploreProject(_proj, (item) =>
@@ -140,6 +205,7 @@ namespace ClassWizard
                return ex.Message;
             }
         }
-    };
+*/
+    }
 }
 

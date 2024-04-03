@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.IO;
 using System.Text;
-
+using System.Collections.Generic;
 
 namespace ClassWizard
 {
@@ -86,6 +86,24 @@ namespace ClassWizard
             _streamDotCpp.Write(bufferDotCpp, 0, bufferDotCpp.Length);
             _streamDotCpp.Close();
             
+        }
+        private void refresh_classes_click(object sender, RoutedEventArgs e)
+        { 
+            List<Logic.ProjectItemInfo> itemList = Logic.GetItemsAllProjects((item) =>
+            {
+                if (item.Document != null)
+                {
+                    //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                    string _extension = System.IO.Path.GetExtension(item.Document.Name);
+                    if (_extension.Equals(".h"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            });
+            itemList.Capacity++;
         }
     }
 }

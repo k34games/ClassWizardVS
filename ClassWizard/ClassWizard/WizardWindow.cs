@@ -4,8 +4,10 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static ClassWizard.Logic;
 
 namespace ClassWizard
 {
@@ -34,7 +36,7 @@ namespace ClassWizard
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
             this.Content = new WizardWindowControl();
-            MessageBox.Show(Logic.TestMethod());
+
             /*
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
             DTE test = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
