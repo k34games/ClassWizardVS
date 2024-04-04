@@ -1,4 +1,6 @@
 ﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections;
@@ -7,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Shapes;
 
 namespace ClassWizard
@@ -15,19 +18,31 @@ namespace ClassWizard
     {
         public class ProjectItemInfo 
         {
+            public class DocumentInfo
+            {
+                public string documentPath;
+                public string documentFileName => System.IO.Path.GetFileName(documentPath);
+                public override string ToString()
+                {
+                    return documentFileName;
+                }
+            }
             public ProjectItem item  ;
             public string solutionPath;
             public bool isDocument;
-            public string documentPath;
+            DocumentInfo docInfo;
             public ProjectItemInfo(ProjectItem _item, string _solutionPath, bool _isDocument, string _documentPath)
             {
                 item = _item;
                 solutionPath = _solutionPath;
 
                 isDocument = _isDocument;
-                documentPath = _documentPath;
+                docInfo.documentPath = _documentPath;
             }
-           
+            public override string ToString()
+            {
+                return isDocument ? docInfo.ToString() : item.Name;
+            }
         }
         private static List<ProjectItemInfo> RecurseExploreItem(ProjectItem _item,string _path, Func<ProjectItem, bool> _filter)
         {
@@ -100,6 +115,46 @@ namespace ClassWizard
             return _result  ;
         }
 
+        public static List<ProjectItemInfo> RecurseExploreCurrentProject(Func<ProjectItem, bool> _filter)
+        {
+            /*
+                 * works, however it feels a bit hiffy, will try to improve when the rest is done
+                 */
+            List<ProjectItemInfo> _result = new List<ProjectItemInfo>();
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
+            // Open a project before running this sample  
+            Array _projects = dte.ActiveSolutionProjects as Array;
+            if (_projects.Length != 0 && _projects != null)
+            {
+                Project _selectedProject = _projects.GetValue(0) as Project;
+                //get the project path
+
+                _result = Logic.RecurseExploreProject(_selectedProject, (item) =>
+                {
+                    if (item.Document != null)
+                    {
+                        //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                        string _extension = System.IO.Path.GetExtension(item.Document.Name);
+                        if (_extension.Equals(".h"))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+
+                }
+                );
+            }
+            else
+            {
+                MessageBox.Show("No Project in solution or selected");
+                // Console.WriteLine("No Project in solution or selected");
+            }
+            return _result;
+        }
+        
         public static List<ProjectItemInfo> GetItemsAllProjects(Func<ProjectItem, bool> _filter)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -121,7 +176,7 @@ namespace ClassWizard
         }
     
     
-    /*}
+   
         public static string TestMethod()
         {
             DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
@@ -133,12 +188,8 @@ namespace ClassWizard
                 msg += "\nThe parent object of the Projects collection: " + prjs.Parent.Name;
                 msg += "\nThe GUID representing the Projects type: " + prjs.Kind;
                 msg += "\nThe projects name are:\n ";
-                /*
-                 * en gros de ce que je comprends
-                 * les filtres ET les fichiers sont des items
-                 * //TODO explorer la piste des documents
-                 * 
-      
+
+
                 //foreach (Project _proj in prjs)
                 //{
                 //    msg += _proj.Name + " ";
@@ -167,17 +218,47 @@ namespace ClassWizard
                 //            if (_doc == null) 
                 //                continue;
                 //            msg += "document of language " + _doc.Language+ "\n";
-      
- 
-     
-                foreach (Project _proj in prjs)
+  
+                /*
+                 * works, however it feels a bit hiffy, will try to improve when the rest is done
+                 */
+                Array _projects = dte.ActiveSolutionProjects as Array;
+                if (_projects.Length != 0 && _projects != null)
                 {
-                    System.Collections.Generic.List<string> _testList = Logic.RecurseExploreProject(_proj, (item) =>
+                    Project _selectedProject = _projects.GetValue(0) as Project;
+                    //get the project path
+
+                    System.Collections.Generic.List<ProjectItemInfo> _testList = Logic.RecurseExploreProject(_selectedProject, (item) =>
                     {
                         if (item.Document != null)
                         {
                             //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
-                            string _extension = Path.GetExtension( item.Document.Name);
+                            string _extension = System.IO.Path.GetExtension(item.Document.Name);
+                            if (_extension.Equals(".h"))
+                            {
+                                return true;
+                            }
+                        }
+                        return false;
+
+                    }
+                    );
+                }
+                else
+                {
+                    MessageBox.Show("No Project in solution or selected");
+                   // Console.WriteLine("No Project in solution or selected");
+                } 
+                /*
+                foreach (Project _proj in prjs)
+                {
+ 
+                    System.Collections.Generic.List<ProjectItemInfo> _testList = Logic.RecurseExploreProject(_proj, (item) =>
+                    {
+                        if (item.Document != null)
+                        {
+                            //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                            string _extension = System.IO.Path.GetExtension( item.Document.Name);
                             if (_extension.Equals(".h"))
                             {
                                 return true;
@@ -188,16 +269,8 @@ namespace ClassWizard
                     }
                     );
                     _testList.ToString();
-                }
-
-                if (prjs.Properties != null)
-                {
-                    msg += "\nProperties:";
-                    foreach (Property prop in prjs.Properties)
-                    {
-                        msg += "\n   " + prop.Name;
-                    }
-                }
+                } 
+                */
                 return msg;
             }
             catch (Exception ex)
@@ -205,7 +278,7 @@ namespace ClassWizard
                return ex.Message;
             }
         }
-*/
+
     }
 }
 

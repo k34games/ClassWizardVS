@@ -15,6 +15,7 @@ namespace ClassWizard
     /// </summary>
     public partial class WizardWindowControl : UserControl
     {
+        List<Logic.ProjectItemInfo> classList = new List<Logic.ProjectItemInfo>();
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardWindowControl"/> class.
         /// </summary>
@@ -46,15 +47,10 @@ namespace ClassWizard
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void select_Destination_Click(object sender, RoutedEventArgs e)
         {
-            /*
-            MessageBox.Show(
-                    string.Format(System.Globalization.CultureInfo.CurrentUICulture, "Invoked '{0}'", this.ToString()),
-                    "WizardWindow"
-            );
-            */
-            //TODO find current folder
+ 
+ 
             System.Windows.Forms.FolderBrowserDialog _dia = new System.Windows.Forms.FolderBrowserDialog();
-            //_dia.SelectedPath = System.IO.Directory.GetCurrentDirectory();
+ 
             
             _dia.RootFolder = System.Environment.SpecialFolder.Desktop;
             _dia.SelectedPath= System.IO.Directory.GetCurrentDirectory();
@@ -88,8 +84,8 @@ namespace ClassWizard
             
         }
         private void refresh_classes_click(object sender, RoutedEventArgs e)
-        { 
-            List<Logic.ProjectItemInfo> itemList = Logic.GetItemsAllProjects((item) =>
+        {
+            classList = Logic.RecurseExploreCurrentProject((item) =>
             {
                 if (item.Document != null)
                 {
@@ -103,7 +99,24 @@ namespace ClassWizard
                 return false;
 
             });
-            itemList.Capacity++;
+            availableClassesList.ItemsSource = classList;
+ 
+            /*
+            classList = Logic.GetItemsAllProjects((item) =>
+            {
+                if (item.Document != null)
+                {
+                    //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                    string _extension = System.IO.Path.GetExtension(item.Document.Name);
+                    if (_extension.Equals(".h"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+
+            });
+ */
         }
     }
 }

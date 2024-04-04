@@ -36,36 +36,7 @@ namespace ClassWizard
             // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
             // the object returned by the Content property.
             this.Content = new WizardWindowControl();
-
-            /*
-            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
-            DTE test = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
-            //gets the solution
-            if (test == null)
-            {
-                return;
-            }
-            Solution _solution = test.Solution;
-            if (_solution == null || _solution.Projects == null)
-            {
-                return;
-            }
-            //TODO give selection
-            //get project 0
-            Project _project = _solution.Projects.Item(new object());
-            if (_project == null ||_solution.Projects == null)
-            {
-                return;
-            }
-            ProjectItems _items = _project.ProjectItems;
-            string _out = "";
-            for (int i  = 0; i < _items.Count; i++)
-            {
-                _out += $"item: {_items.Item(i).Name} type: {_items.Item(0).Document.Type}\n";
-
-            }
-            MessageBox.Show(_out);
- */
+  
 
         }
     };
