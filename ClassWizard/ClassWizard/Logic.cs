@@ -21,7 +21,7 @@ namespace ClassWizard
             public class DocumentInfo
             {
                 public string documentPath;
-                public string documentFileName => System.IO.Path.GetFileName(documentPath);
+                public string documentFileName => System.IO.Path.GetFileNameWithoutExtension(documentPath);
                 public override string ToString()
                 {
                     return documentFileName;
@@ -30,13 +30,14 @@ namespace ClassWizard
             public ProjectItem item  ;
             public string solutionPath;
             public bool isDocument;
-            DocumentInfo docInfo;
+            public DocumentInfo docInfo= new DocumentInfo();
             public ProjectItemInfo(ProjectItem _item, string _solutionPath, bool _isDocument, string _documentPath)
             {
                 item = _item;
                 solutionPath = _solutionPath;
 
                 isDocument = _isDocument;
+
                 docInfo.documentPath = _documentPath;
             }
             public override string ToString()
@@ -175,7 +176,14 @@ namespace ClassWizard
 
         }
     
-    
+        public static string GetRelativePath(string _from, string _to)
+        {
+            string _firstPath = System.IO.Path.GetFullPath(_from);
+            string _toPath = System.IO.Path.GetFullPath(_to);
+
+            string.CompareOrdinal(_firstPath, _toPath);//StringComparison.OrdinalIgnoreCase
+            return "";
+        }
    
         public static string TestMethod()
         {

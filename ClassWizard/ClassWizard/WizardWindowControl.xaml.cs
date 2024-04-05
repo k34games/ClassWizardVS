@@ -16,6 +16,7 @@ namespace ClassWizard
     public partial class WizardWindowControl : UserControl
     {
         List<Logic.ProjectItemInfo> classList = new List<Logic.ProjectItemInfo>();
+        string targetDirectory = "";
         /// <summary>
         /// Initializes a new instance of the <see cref="WizardWindowControl"/> class.
         /// </summary>
@@ -55,6 +56,7 @@ namespace ClassWizard
             _dia.RootFolder = System.Environment.SpecialFolder.Desktop;
             _dia.SelectedPath= System.IO.Directory.GetCurrentDirectory();
             _dia.ShowDialog();
+            targetDirectory = _dia.SelectedPath;
             GenerateButton.IsEnabled = true;
             debugText.Text = _dia.SelectedPath;
         }
@@ -62,7 +64,7 @@ namespace ClassWizard
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void generate_class_click(object sender, RoutedEventArgs e)
         {
-            string filePath = System.IO.Path.Combine(debugText.Text, ClassNameEntryTextBox.Text);
+            string filePath = System.IO.Path.Combine(targetDirectory, ClassNameEntryTextBox.Text);
             string className =ClassNameEntryTextBox.Text;
 
             GenerateClasses(filePath , className);
@@ -71,9 +73,21 @@ namespace ClassWizard
 
         private void GenerateClasses(string filePath, string className)
         {
+            bool isInheriting = availableClassesList.SelectedItems.Count >= 0;
+            string _newText = "";
+            if (isInheriting)
+            {
+                Logic.ProjectItemInfo currentSelected = (Logic.ProjectItemInfo )availableClassesList.SelectedItems[0];
+                if (currentSelected.isDocument)
+                {
+                    //TODO finish
+                    _newText = $": public {currentSelected.docInfo.documentFileName}";
+                   
+                }
+            }
             //.h
             FileStream _streamDotH = System.IO.File.Create(filePath + ".h");
-            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"#pragma once \nclass {className}" + "\n{\n};");
+            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"#pragma once \nclass {className}" + _newText + "\n{\n};");
             _streamDotH.Write(bufferDotH, 0, bufferDotH.Length);
             _streamDotH.Close();
             //.cpp
@@ -82,6 +96,10 @@ namespace ClassWizard
             _streamDotCpp.Write(bufferDotCpp, 0, bufferDotCpp.Length);
             _streamDotCpp.Close();
             
+        }
+        private void clear_selected_inheritance_click(object sender, RoutedEventArgs e)
+        { 
+            availableClassesList.SelectedItem = null;
         }
         private void refresh_classes_click(object sender, RoutedEventArgs e)
         {
@@ -100,7 +118,7 @@ namespace ClassWizard
 
             });
             availableClassesList.ItemsSource = classList;
- 
+            availableClassesList.SelectionChanged += OnClassSelectedChanged;
             /*
             classList = Logic.GetItemsAllProjects((item) =>
             {
@@ -117,6 +135,12 @@ namespace ClassWizard
 
             });
  */
+        }
+
+        private void OnClassSelectedChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            debugText.Text = availableClassesList.SelectedItem != null? availableClassesList.SelectedItem.ToString() :"No class selected";
         }
     }
 }

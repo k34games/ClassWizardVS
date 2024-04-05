@@ -9,17 +9,18 @@
              mc:Ignorable="d"
              d:DesignHeight="500" d:DesignWidth="500"
              Name="MyToolWindow" Width="500" Height="500">
- 
+
     <Grid Width="500" Height="500" HorizontalAlignment="Left">
-        <TextBlock x:Name="debugText" Margin="0,48,0,402" Text="Class Destination" FontSize="18" HorizontalAlignment="Left" Width="500" Grid.ColumnSpan="2" Foreground="White"/>
+        <TextBlock x:Name="debugText" Margin="0,48,0,402" Text="Class Destination" FontSize="18" HorizontalAlignment="Left" Width="500" Grid.ColumnSpan="2" Foreground="White" TextWrapping="Wrap"/>
         <Button x:Name="ChooseDestinationButton" Content="Choose Destination" Margin="10,10,0,0" Click="select_Destination_Click" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="119" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="ClassNameEntryTextBox" TextWrapping="Wrap" Text="Class Name" Margin="10,103,0,373" HorizontalAlignment="Left" Width="200" Grid.ColumnSpan="2"/>
-        <Button x:Name="GenerateButton" Content="Generate" Margin="150,103,0,373" Click="generate_class_click" HorizontalAlignment="Left" Width="119" Grid.Column="1"/>
+        <TextBox x:Name="ClassNameEntryTextBox" TextWrapping="Wrap" Text="Class Name" Margin="10,103,0,373" HorizontalAlignment="Left" Width="151"/>
+        <Button x:Name="GenerateButton" Content="Generate" Margin="166,103,0,373" Click="generate_class_click" HorizontalAlignment="Left" Width="119"/>
         <Button x:Name="RefreshButton" Content="Refresh classes" Margin="10,145,0,331" Click="refresh_classes_click" HorizontalAlignment="Left" Width="119" Grid.ColumnSpan="2"/>
+        <Button x:Name="ClearInheritanceButton" Content="Clear Inheritance" Margin="10,275,0,201" Click="clear_selected_inheritance_click" HorizontalAlignment="Left" Width="119"/>
         <ListBox x:Name="availableClassesList" d:ItemsSource="{d:SampleData ItemCount=40}" Margin="161,140,35,41" BorderBrush="#FF5A6586" Foreground="Black" Background="White">
 
         </ListBox>
-        <Label Content="Select class heritage:" Margin="0,188,344,230" Foreground="White" HorizontalAlignment="Right"/>
+        <Label Content="Select class heritage:" Margin="0,188,371,230" Foreground="White" HorizontalAlignment="Right"/>
 
     </Grid>
 </UserControl>
