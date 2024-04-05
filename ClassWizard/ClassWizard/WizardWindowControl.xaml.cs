@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using EnvDTE;
+using System;
 
 namespace ClassWizard
 {
@@ -75,6 +77,8 @@ namespace ClassWizard
         {
             bool isInheriting = availableClassesList.SelectedItems.Count >= 0;
             string _newText = "";
+            string _include = "";
+            //.h
             if (isInheriting)
             {
                 Logic.ProjectItemInfo currentSelected = (Logic.ProjectItemInfo )availableClassesList.SelectedItems[0];
@@ -82,20 +86,33 @@ namespace ClassWizard
                 {
                     //TODO finish
                     _newText = $": public {currentSelected.docInfo.documentFileName}";
-                   
+                    _include = $"#include \"{Logic.GetRelativePath(filePath, currentSelected.docInfo.documentPath)}\"";
                 }
             }
-            //.h
             FileStream _streamDotH = System.IO.File.Create(filePath + ".h");
-            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"#pragma once \nclass {className}" + _newText + "\n{\n};");
-            _streamDotH.Write(bufferDotH, 0, bufferDotH.Length);
+      
+            byte[] bufferDotH = new UTF8Encoding(true).GetBytes($"#pragma once\n{_include}\nclass { className}" + _newText + "\n{\n};"); 
+            _streamDotH.Write(bufferDotH,  0, bufferDotH.Length);
             _streamDotH.Close();
             //.cpp
             FileStream _streamDotCpp = System.IO.File.Create(filePath + ".cpp");
             byte[] bufferDotCpp = new UTF8Encoding(true).GetBytes($"#include \"{ className}.h\"");
             _streamDotCpp.Write(bufferDotCpp, 0, bufferDotCpp.Length);
             _streamDotCpp.Close();
-            
+
+            Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+
+            DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
+            Array _projects = dte.ActiveSolutionProjects as Array;
+
+            if (_projects.Length != 0 && _projects != null)
+            {
+                Project _selectedProject = _projects.GetValue(0) as Project;
+
+                _selectedProject.ProjectItems.AddFromFile(_streamDotH.Name);
+                _selectedProject.ProjectItems.AddFromFile(_streamDotCpp.Name);
+            }
+
         }
         private void clear_selected_inheritance_click(object sender, RoutedEventArgs e)
         { 

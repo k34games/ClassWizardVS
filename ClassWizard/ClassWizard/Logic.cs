@@ -178,11 +178,30 @@ namespace ClassWizard
     
         public static string GetRelativePath(string _from, string _to)
         {
-            string _firstPath = System.IO.Path.GetFullPath(_from);
-            string _toPath = System.IO.Path.GetFullPath(_to);
-
-            string.CompareOrdinal(_firstPath, _toPath);//StringComparison.OrdinalIgnoreCase
-            return "";
+            string _result = "";
+            string _firstPath = System.IO.Path.GetFullPath(_from); //D:\\imagine\\code\\temp\\child.h
+            string _toPath = System.IO.Path.GetFullPath(_to);      //D:\\imagine\\test\\magic\\mother.h
+            int _index = 0;
+            string includePath = "";
+            while (_firstPath[_index] == _toPath[_index])
+            {
+                _index++;
+                if (_index >= _firstPath.Length || _index >= _toPath.Length)
+                {
+                    break;
+                }
+            }
+            _firstPath = _firstPath.Substring(_index);// code\\temp\\child.h
+            _toPath = _toPath.Substring(_index);      // test\\magic\\mother.h
+            foreach (char c in _firstPath )
+            {
+                if (c == '\\')
+                {
+                    _result += "../";
+                }
+            }
+            
+            return _result + _toPath;
         }
    
         public static string TestMethod()
