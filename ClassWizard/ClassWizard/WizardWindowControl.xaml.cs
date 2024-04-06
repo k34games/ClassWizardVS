@@ -66,8 +66,10 @@ namespace ClassWizard
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:ElementMustBeginWithUpperCaseLetter", Justification = "Default event handler naming pattern")]
         private void generate_class_click(object sender, RoutedEventArgs e)
         {
-            string filePath = System.IO.Path.Combine(targetDirectory, ClassNameEntryTextBox.Text);
-            string className =ClassNameEntryTextBox.Text;
+            string _className = System.IO.Path.GetFileName( ClassNameEntryTextBox.Text.Trim());
+ 
+            string filePath = System.IO.Path.Combine(targetDirectory, _className);
+            string className = _className;
 
             GenerateClasses(filePath , className);
  
@@ -75,7 +77,7 @@ namespace ClassWizard
 
         private void GenerateClasses(string filePath, string className)
         {
-            bool isInheriting = availableClassesList.SelectedItems.Count >= 0;
+            bool isInheriting = availableClassesList.SelectedItems.Count > 0;
             string _newText = "";
             string _include = "";
             //.h
@@ -111,7 +113,9 @@ namespace ClassWizard
 
                 _selectedProject.ProjectItems.AddFromFile(_streamDotH.Name);
                 _selectedProject.ProjectItems.AddFromFile(_streamDotCpp.Name);
+
             }
+            debugText.Text = "Successfully created class!";
 
         }
         private void clear_selected_inheritance_click(object sender, RoutedEventArgs e)
@@ -122,6 +126,8 @@ namespace ClassWizard
         {
             classList = Logic.RecurseExploreCurrentProject((item) =>
             {
+
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 if (item.Document != null)
                 {
                     //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));

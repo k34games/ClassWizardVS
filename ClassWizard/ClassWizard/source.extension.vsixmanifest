@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="ClassWizard.899af26d-b110-4578-a5ee-bd2f80cb1ca6" Version="1.1.1" Language="en-US" Publisher="k34" />
+        <Identity Id="ClassWizard.899af26d-b110-4578-a5ee-bd2f80cb1ca6" Version="1.2.0" Language="en-US" Publisher="k34" />
         <DisplayName>ClassWizard</DisplayName>
         <Description xml:space="preserve">A Class Wizard inspired by Unreal Engine's</Description>
         <Icon>WizardLogo.png</Icon>

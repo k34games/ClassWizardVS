@@ -42,6 +42,7 @@ namespace ClassWizard
             }
             public override string ToString()
             {
+                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                 return isDocument ? docInfo.ToString() : item.Name;
             }
         }
@@ -134,6 +135,8 @@ namespace ClassWizard
 
                 _result = Logic.RecurseExploreProject(_selectedProject, (item) =>
                 {
+
+                    Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                     if (item.Document != null)
                     {
                         //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
@@ -182,7 +185,7 @@ namespace ClassWizard
             string _firstPath = System.IO.Path.GetFullPath(_from); //D:\\imagine\\code\\temp\\child.h
             string _toPath = System.IO.Path.GetFullPath(_to);      //D:\\imagine\\test\\magic\\mother.h
             int _index = 0;
-            string includePath = "";
+ 
             while (_firstPath[_index] == _toPath[_index])
             {
                 _index++;
@@ -203,7 +206,7 @@ namespace ClassWizard
             
             return _result + _toPath;
         }
-   
+   /*
         public static string TestMethod()
         {
             DTE dte = (DTE)Microsoft.VisualStudio.Shell.Package.GetGlobalService(typeof(SDTE));
@@ -248,7 +251,7 @@ namespace ClassWizard
   
                 /*
                  * works, however it feels a bit hiffy, will try to improve when the rest is done
-                 */
+                 
                 Array _projects = dte.ActiveSolutionProjects as Array;
                 if (_projects.Length != 0 && _projects != null)
                 {
@@ -297,7 +300,7 @@ namespace ClassWizard
                     );
                     _testList.ToString();
                 } 
-                */
+                
                 return msg;
             }
             catch (Exception ex)
@@ -305,6 +308,7 @@ namespace ClassWizard
                return ex.Message;
             }
         }
+   */
 
     }
 }
