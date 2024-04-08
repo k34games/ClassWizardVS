@@ -7,3 +7,9 @@ there you will have a new window appear,in order to be able to generate a class,
 then you should enter your class' name, click generate, and the class will be where you put it!
 You can now inherit from the classes in the solution!
 also feed back when the class is created
+
+
+KNOW ISSUES:
+
+crash when refreshing classes with a lot of tabs open
+refreshing classes only shows the .h files open in history
