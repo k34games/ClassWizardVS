@@ -1,0 +1,32 @@
+balise, servent a marquer le debut d'un champ "{!" et "!}" 
+balises conditionnelles, "[?" et  "?]"
+dans les balises conditionnelles, sont des champs booleens (style IsParented)
+dans les balises sont des champs strings, qui seront remplacés par la valeur style  parentName 
+
+example pour du cpp:
+
+#pragma once
+
+{![?hasParent?]#include parentPath!}
+
+class {!newClassName!} {![?hasParent?] : parentName!}
+{
+	//description
+}
+
+python:
+
+class newClassName {![?hasParent?](parentName)):
+	def __init__():
+		pass
+
+si je detecte ou une balise commence({!), je dois chercher dans la balise si il ya une condition, ([?) et si elle est remplie (hasParent),
+je remplace toutes les occurences de champs avec une boucle, et j'ajoute au resultat final
+si il n'y a pas de conditions, je remplace juste toutes les occurences de champs avec la meme boucle, en ajoutant au resultat final la balise sans marquage
+
+j'ai besoin de: 
+	dictionnaire de champs remplis en clé, et de valeur en string associés avec leurs clés(parentName:OldClass)
+	dictionnaire de champs remplis en clés, et de valeur booléennes en clé (hasParent:true)
+	lecteur/ecrivain de fichier custom, avec possibilité de skip un certain nombre de characteres
+	remplire les dictionnaires avec les infos necessaires
+	

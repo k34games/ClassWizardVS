@@ -124,22 +124,28 @@ namespace ClassWizard
         }
         private void refresh_classes_click(object sender, RoutedEventArgs e)
         {
+
             classList = Logic.RecurseExploreCurrentProject((item) =>
             {
 
-                Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
+                ThreadHelper.ThrowIfNotOnUIThread();
                 if (item.Document != null)
-                {
-                    //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                { 
                     string _extension = System.IO.Path.GetExtension(item.Document.Name);
                     if (_extension.Equals(".h"))
                     {
                         return true;
-                    }
+                    } 
                 }
                 return false;
 
             });
+            string _debugPrint = "";
+            foreach (Logic.ProjectItemInfo _item in classList)
+            {
+                _debugPrint += $"\n{_item.docInfo.documentFileName}";
+            }
+            MessageBox.Show(_debugPrint);
             availableClassesList.ItemsSource = classList;
             availableClassesList.SelectionChanged += OnClassSelectedChanged;
             /*

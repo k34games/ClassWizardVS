@@ -1,17 +1,9 @@
-﻿using EnvDTE;
-using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
+﻿using EnvDTE; 
 using Microsoft.VisualStudio.Shell.Interop;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Shapes;
-
+using System; 
+using System.Collections.Generic;  
+using System.Windows; 
+    
 namespace ClassWizard
 {
     static class Logic
@@ -138,8 +130,7 @@ namespace ClassWizard
 
                     Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
                     if (item.Document != null)
-                    {
-                        //string _extension = Path.GetExtension(Path.Combine( item.Document.Path, item.Document.Name));
+                    { 
                         string _extension = System.IO.Path.GetExtension(item.Document.Name);
                         if (_extension.Equals(".h"))
                         {

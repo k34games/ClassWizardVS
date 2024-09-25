@@ -13,3 +13,6 @@ KNOW ISSUES:
 
 crash when refreshing classes with a lot of tabs open
 refreshing classes only shows the .h files open in history
+
+TODO:
+ajouter templates personnalisé, avec balises, et un dict avec les infos qui remplace
